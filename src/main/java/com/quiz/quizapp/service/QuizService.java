@@ -5,6 +5,7 @@ import com.quiz.quizapp.dao.QuizDao;
 import com.quiz.quizapp.model.Question;
 import com.quiz.quizapp.model.QuestionDTO;
 import com.quiz.quizapp.model.Quiz;
+import com.quiz.quizapp.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,19 @@ public class QuizService {
             questionsForUser.add(qD);
         }
         return questionsForUser;
+    }
+
+    public Integer calculateScore(Integer id, List<Response> responses) {
+        Quiz quiz = quizDao.findById(id).get();
+        List<Question> questions = quiz.getQuestions();
+        int correct = 0;
+        int i = 0;
+        for (Response response : responses) {
+            if(response.getResponse().equals(questions.get(i).getRightAnswer())) {
+                correct++;
+            }
+            i++;
+        }
+        return correct;
     }
 }
